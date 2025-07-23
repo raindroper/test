@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>OpenChat 首页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          integrity="sha512-pE9bQfyTk9xKxyZ5cZDkoUUR0dMF58ISZqvGlf5ZB0FDpIcrZ77spzdDg9RbU2ixdW5bCClhdS50P1c9vFv4Rw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        header {
+            z-index: 999;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+
+        .fp-section {
+            padding-top: 4rem !important;
+            overflow: hidden;
+        }
+
+        .fp-overflow {
+            overflow-y: hidden !important;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in-start {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-500 {
+            animation-delay: 0.5s;
+        }
+
+        .fp-watermark {
+            display: none !important;
+        }
+
+        .btn-base {
+            @apply group text-left px-5 py-3 rounded-xl transition-all duration-300 flex items-center gap-3;
+        }
+
+        .btn-active {
+            @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-[1.02];
+        }
+
+        .btn-inactive {
+            @apply bg-white hover:bg-gray-100 text-gray-700;
+        }
+
+        .btn-download {
+            @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm px-4 py-2 rounded-xl hover:shadow-lg transition;
+        }
+
+        .section:nth-child(1) {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+        }
+        .section:nth-child(2) {
+            background: linear-gradient(135deg, #1e3a8a, #9333ea);
+        }
+        .section:nth-child(3) {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+        }
+        .section:nth-child(4) {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+        }
+        .section:nth-child(5) {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        }
+
+        .text-gray-600 {
+            color: #cbd5e1;
+        }
+
+        .text-gray-700 {
+            color: #e2e8f0;
+        }
+
+        .border-gray-300 {
+            border-color: #334155;
+        }
+
+        .border-gray-100 {
+            border-color: #475569;
+        }
+
+        .text-gray-400 {
+            color: #94a3b8;
+        }
+
+        .text-gray-800 {
+            color: #f1f5f9;
+        }
+
+        /*.section-bg {*/
+        /*    background-image: linear-gradient(to bottom right, rgba(30, 58, 138, 0.3), rgba(124, 58, 237, 0.3)), url('https://images.unsplash.com/photo-1601290266442-6b1f2ab5e30b?auto=format&fit=crop&w=1600&q=80');*/
+        /*    background-size: cover;*/
+        /*    background-position: center;*/
+        /*    background-blend-mode: overlay;*/
+        /*}*/
+
+        .faq-enter-active, .faq-leave-active {
+            transition: all 0.3s ease;
+        }
+
+        .faq-enter-from, .faq-leave-to {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .platform-wave {
+            transition: background-color 0.5s, color 0.5s;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .platform-wave.active-windows {
+            transition: color 1s;
+            color: #2563eb;
+        }
+
+        .platform-wave.active-apple-m1 {
+            transition: color 1s;
+            color: #60a5fa;
+        }
+
+        .platform-wave.active-apple-intel {
+            transition: color 1s;
+            color: #93c5fd;
+        }
+
+        .platform-wave.active-github {
+            transition: color 1s;
+            color: #a78bfa;
+        }
+
+        .platform-wave.active-gitee {
+            transition: color 1s;
+            color: #f87171;
+        }
+
+        .platform-wave.active-xhs {
+            transition: color 1s;
+            color: #ff2442;
+        }
+        .fade-img-enter-active, .fade-img-leave-active {
+            transition: opacity 0.4s;
+        }
+        .fade-img-enter-from, .fade-img-leave-to {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+<div id="app" class="z-1">
+    <header id="mainHeader"
+            class="fixed top-0 left-0 right-0 bg-gray-800 shadow flex justify-between items-center px-4 py-3 border-b border-gray-700">
+        <div class="flex items-center space-x-2">
+            <img src="./icon.png" alt="Logo" class="h-8 w-8"/>
+            <span class="text-lg font-bold text-white">OpenChat</span>
+        </div>
+        <nav class="space-x-4 text-sm text-gray-300">
+            <a href="#" class="hover:text-white"><i class="fas fa-users mr-1"></i>社群</a>
+            <a href="#" @click.prevent="goToFaq" class="hover:text-white"><i class="fas fa-question-circle mr-1"></i>FAQ</a>
+        </nav>
+        <button class="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm px-4 py-2 rounded-xl hover:shadow-lg transition">
+            <i class="fas fa-download mr-2"></i>下载客户端
+        </button>
+    </header>
+    <div id="fullpage">
+        <div class="section fp-section section-bg h-full flex flex-col justify-center px-4"
+             style="background-image: linear-gradient(to bottom right, rgba(30,58,138,0.3), rgba(124,58,237,0.3)), url('https://images.unsplash.com/photo-1601290266442-6b1f2ab5e30b?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+            <div class="max-w-6xl w-full mx-auto flex flex-col lg:flex-row items-center gap-24">
+                <div class="flex-1 text-center lg:text-left">
+                    <h1 class="text-5xl font-extrabold leading-snug text-white mb-4 animated delay-300">
+                        <i class="fas fa-robot mr-3 text-purple-400 bounce"></i>
+                        OpenChat
+                    </h1>
+                    <p class="text-lg text-blue-100 animated delay-300">
+                        开源免费的AI解决方案，保护您的数据安全，提供强大的文档处理和智能助手功能，无需注册！即可开启您的大模型体验！！
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-3 justify-center lg:justify-start">
+                        <a href="#" class="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                            <i class="fab fa-windows mr-2"></i>Windows 下载
+                        </a>
+                        <a href="#" class="px-5 py-2 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition">
+                            <i class="fab fa-apple mr-2"></i>Mac M1 下载
+                        </a>
+                        <a href="#" class="px-5 py-2 bg-gray-400 text-white rounded-xl hover:bg-gray-500 transition">
+                            <i class="fab fa-apple mr-2"></i>Mac Intel 下载
+                        </a>
+                    </div>
+                </div>
+                <div class="flex-1 animated delay-300">
+                    <img src="./index.png" alt="展示图"
+                         class="w-full h-auto object-cover rounded-xl shadow-xl ring-2 ring-white/20"/>
+                </div>
+            </div>
+        </div>
+        <div class="section fp-section h-full flex flex-col justify-center px-4 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]">
+            <section
+                    class="max-w-screen-lg mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-24 items-start">
+                <div class="md:col-span-2 animated">
+                    <div class="text-center text-blue-100 text-lg mb-3">
+                        <i class="fas fa-comment-dots mr-2 text-purple-400 pulse"></i>
+                        {{ tabs[activeTab].desc }}
+                    </div>
+                    <transition name="fade-img" mode="out-in">
+                        <img
+                                :src="tabs[activeTab].image"
+                                :alt="tabs[activeTab].name"
+                                :key="tabs[activeTab].image"
+                                class="w-full rounded-xl object-cover h-72 shadow-md border border-gray-100"
+                        />
+                    </transition>
+                </div>
+                <div class="flex flex-col gap-3 animated h-full justify-center">
+                    <button
+                            v-for="(tab, index) in tabs"
+                            :key="index"
+                            @click="activeTab = index"
+                            :class="[
+                              'group text-left px-5 py-3 rounded-xl transition-all duration-300 flex items-center gap-3',
+                              activeTab === index ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-[1.02]' : 'bg-white hover:bg-gray-100 text-gray-700'
+                            ]"
+                    >
+                        <span :class="activeTab === index ? 'text-green-400' : 'text-gray-400'">
+                            <i class="fas fa-circle mr-2"></i>
+                        </span>
+                        <span class="text-base font-medium">{{ tab.name }}</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+        <div class="section fp-section h-full flex flex-col justify-center px-4 bg-gradient-to-br from-[#1e293b] to-[#0f172a]">
+            <div class="max-w-4xl w-full mx-auto bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-8 shadow-xl">
+                <h2 class="text-2xl font-semibold text-center mb-4 text-white flex items-center justify-center gap-2">
+                    <i class="fas fa-cloud-download-alt mr-2 text-pink-400 bounce"></i>
+                    免费开源
+                </h2>
+                <p class="text-center text-gray-300 mb-8">
+                    OpenChat面相社会开源开放，您不仅可以免费使用本软件，也能在开源网站上看到我们的开发进度，若您有任何疑问和建议，欢迎通过社群与我们联系!
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 justify-center items-center">
+                    <a href="#"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#2563eb] transition"
+                       data-platform="windows">
+                        <i class="fab fa-windows text-3xl mb-2"></i>
+                        <span class="text-sm">Windows</span>
+                    </a>
+                    <a href="#"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#60a5fa] transition"
+                       data-platform="apple-m1">
+                        <i class="fab fa-apple text-3xl mb-2"></i>
+                        <span class="text-sm">Mac M1</span>
+                    </a>
+                    <a href="#"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#93c5fd] transition"
+                       data-platform="apple-intel">
+                        <i class="fab fa-apple text-3xl mb-2"></i>
+                        <span class="text-sm">Mac Intel</span>
+                    </a>
+                    <a href="https://github.com/openchat" target="_blank"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#a78bfa] transition"
+                       data-platform="github">
+                        <i class="fab fa-github text-3xl mb-2"></i>
+                        <span class="text-sm">GitHub</span>
+                    </a>
+                    <a href="https://gitee.com/openchat" target="_blank"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#f87171] transition"
+                       data-platform="gitee">
+                        <i class="fab fa-git-alt text-3xl mb-2"></i>
+                        <span class="text-sm">Gitee</span>
+                    </a>
+                    <a href="https://www.xiaohongshu.com/user/openchat" target="_blank"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#ff2442] transition"
+                       data-platform="xhs">
+                        <i class="fas fa-book-open text-3xl mb-2"></i>
+                        <span class="text-sm">小红书</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="section fp-section h-full flex flex-col justify-center px-4 bg-[#0f172a]">
+            <div class="max-w-screen-md mx-auto px-6 pt-12 pb-32 flex-1 flex flex-col justify-center bg-white/5 backdrop-blur-md border border-white/10 rounded-xl shadow-xl">
+                <h2 class="text-xl font-semibold mb-6 animated flex items-center text-white">
+                    <i class="fas fa-question-circle mr-2 text-blue-400 pulse"></i>
+                    常见问题
+                </h2>
+                <div v-for="(item, index) in faqs" :key="index" class="mb-4 animated">
+                    <button @click="toggle(index)"
+                            class="w-full text-left font-medium py-2 border-b border-gray-600 text-white flex items-center">
+                        <span v-if="!item.open">
+                          <i class="fas fa-chevron-down mr-2 text-gray-400"></i>
+                        </span>
+                        <span v-else>
+                          <i class="fas fa-chevron-up mr-2 text-blue-300"></i>
+                        </span>
+                        {{ item.question }}
+                    </button>
+                    <transition name="faq">
+                        <div v-show="item.open" class="text-sm text-gray-300 mt-2 px-2">
+                            {{ item.answer }}
+                        </div>
+                    </transition>
+                </div>
+            </div>
+            <footer class="absolute bottom-0 left-0 w-full text-center text-sm text-gray-400 border-t pt-6 pb-6 bg-transparent">
+                © 2025 OpenChat - 开源私有AI助手
+            </footer>
+        </div>
+    </div>
+</div>
+<script>
+    const {createApp, ref} = Vue
+    createApp({
+        setup() {
+            const activeTab = ref(0)
+            const tabs = ref([
+                {
+                    name: '多元兼容',
+                    image: './文件上传.png',
+                    desc: '1OpenChat兼容主流云端大模型，无论是 OpenAI 的强大语言理解能力，还是 Deepseek 的高效推理性能，亦或是硅基流动的创新技术，都能无缝接入；无需在不同平台间切换便能享体验所有模型服务'
+                },
+                {
+                    name: '安全部署',
+                    image: './index.png',
+                    desc: '2OpenChat兼容主流云端大模型，无论是 OpenAI 的强大语言理解能力，还是 Deepseek 的高效推理性能，亦或是硅基流动的创新技术，都能无缝接入；无需在不同平台间切换便能享体验所有模型服务'
+                },
+                {
+                    name: '实用插件',
+                    image: './文件上传.png',
+                    desc: '3OpenChat兼容主流云端大模型，无论是 OpenAI 的强大语言理解能力，还是 Deepseek 的高效推理性能，亦或是硅基流动的创新技术，都能无缝接入；无需在不同平台间切换便能享体验所有模型服务'
+                },
+                {
+                    name: '模型应用',
+                    image: './文件上传.png',
+                    desc: '4OpenChat兼容主流云端大模型，无论是 OpenAI 的强大语言理解能力，还是 Deepseek 的高效推理性能，亦或是硅基流动的创新技术，都能无缝接入；无需在不同平台间切换便能享体验所有模型服务'
+                }
+            ])
+
+            const platforms = ref([
+                {name: 'Windows', icon: 'icon-windows.svg'},
+                {name: 'Mac M1', icon: 'icon-mac-m1.svg'},
+                {name: 'Mac Intel', icon: 'icon-mac-intel.svg'},
+                {name: 'GitHub', icon: 'icon-github.svg'},
+                {name: 'Gitee', icon: 'icon-gitee.svg'},
+                {name: '小红书', icon: 'icon-xhs.svg'}
+            ])
+
+            const faqs = ref([
+                {question: 'OpenChat如何下载和安装？', answer: '点击页面中的图标选择对应平台进行下载安装。', open: false},
+                {
+                    question: 'OpenChat支持哪些功能？',
+                    answer: '支持本地部署、文件问答、插件扩展、联网搜索等多种能力。',
+                    open: false
+                },
+                {
+                    question: '是否支持手机端使用？',
+                    answer: '目前支持Android和iOS平台，可通过各自渠道下载安装。',
+                    open: false
+                },
+                {
+                    question: '是否需要联网？',
+                    answer: '核心功能可在本地运行，无需联网。联网搜索等需连接互联网。',
+                    open: false
+                }
+            ])
+
+            function toggle(index) {
+                faqs.value[index].open = !faqs.value[index].open
+            }
+
+            const goToFaq = () => {
+                const fullpageApi = window.fullpage_api;
+                if (fullpageApi) {
+                    fullpageApi.moveTo(document.querySelectorAll('.fp-section').length); // 移动到最后一屏（FAQ）
+                }
+            }
+            const scrollToTop = () => {
+                const fullpageApi = window.fullpage_api;
+                if (fullpageApi) {
+                    fullpageApi.moveTo(1); // 滚动到第 1 屏
+                }
+            }
+
+            return {
+                activeTab,
+                tabs,
+                faqs,
+                platforms,
+                toggle,
+                goToFaq,
+                scrollToTop
+            }
+        },
+        mounted() {
+            const animatedSections = new Set()
+            new fullpage('#fullpage', {
+                autoScrolling: true,
+                navigation: false,
+                scrollHorizontally: false,
+                paddingTop: '4rem',
+                credits: {
+                    enabled: false,
+                    label: '',
+                    position: 'right'
+                },
+                onLeave: function (origin, destination, direction) {
+                    const header = document.getElementById('mainHeader')
+                    if (origin.index === 0 && direction === 'down') {
+                        header.classList.add('header-hidden')
+                    } else if (destination.index === 0 && direction === 'up') {
+                        header.classList.remove('header-hidden')
+                    }
+                },
+                afterLoad: function (origin, destination) {
+                    const section = destination.item
+                    const sectionId = destination.index
+                    if (animatedSections.has(sectionId)) return
+                    animatedSections.add(sectionId)
+                    const fadeEls = section.querySelectorAll('.animated')
+                    fadeEls.forEach((el, i) => {
+                        el.style.animationDelay = `${0.1 * i}s`
+                        el.classList.add('fade-in-start')
+                    })
+                }
+            })
+        }
+    }).mount('#app')
+    document.addEventListener('DOMContentLoaded', () => {
+        const platforms = document.querySelectorAll('.platform-wave');
+        let i = 0;
+        let platformInterval = null;
+
+        function highlight(index) {
+            platforms.forEach((el, idx) => {
+                el.classList.remove(
+                    'active-windows',
+                    'active-apple-m1',
+                    'active-apple-intel',
+                    'active-github',
+                    'active-gitee',
+                    'active-xhs'
+                );
+                if (idx === index) {
+                    const key = el.dataset.platform;
+                    el.classList.add(`active-${key}`);
+                }
+            });
+        }
+
+        function startWave() {
+            platformInterval = setInterval(() => {
+                highlight(i);
+                i = (i + 1) % platforms.length;
+            }, 2000);
+        }
+
+        function stopWave() {
+            clearInterval(platformInterval);
+            platforms.forEach((el, idx) => {
+                el.classList.remove(
+                    'active-windows',
+                    'active-apple-m1',
+                    'active-apple-intel',
+                    'active-github',
+                    'active-gitee',
+                    'active-xhs'
+                );
+            });
+        }
+
+        platforms.forEach((el) => {
+            el.addEventListener('mouseenter', stopWave);
+            el.addEventListener('mouseleave', startWave);
+        });
+
+        startWave();
+    });
+</script>
+</body>
+</html>
