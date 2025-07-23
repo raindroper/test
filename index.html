@@ -1,493 +1,552 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OpenChat - 安全高效的本地AI解决方案</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-      @keyframes fadeInAnimation {
-          from {
-              opacity: 0.4;
-          }
-          50% {
-              opacity: 1;
-          }
-          to {
-              opacity: 0.4;
-          }
-      }
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>OpenChat 首页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          integrity="sha512-pE9bQfyTk9xKxyZ5cZDkoUUR0dMF58ISZqvGlf5ZB0FDpIcrZ77spzdDg9RbU2ixdW5bCClhdS50P1c9vFv4Rw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            height: 100%;
+        }
 
-      /* 简单的 fade-in 动画 */
-      @keyframes fadeIn {
-          from {
-              opacity: 0;
-          }
-          to {
-              opacity: 1;
-          }
-      }
+        header {
+            z-index: 999;
+            transition: transform 0.3s ease-in-out;
+        }
 
-      .fade-in {
-          animation: fadeIn 0.4s ease-in-out;
-      }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
 
-      .fade-animation {
-          animation: fadeInAnimation 8s ease-in-out infinite;
-      }
-  </style>
+        .fp-section {
+            padding-top: 4rem !important;
+            overflow: hidden;
+        }
+
+        .fp-overflow {
+            overflow-y: hidden !important;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in-start {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-500 {
+            animation-delay: 0.5s;
+        }
+
+        .fp-watermark {
+            display: none !important;
+        }
+
+        .btn-base {
+            @apply group text-left px-5 py-3 rounded-xl transition-all duration-300 flex items-center gap-3;
+        }
+
+        .btn-active {
+            @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-[1.02];
+        }
+
+        .btn-inactive {
+            @apply bg-white hover:bg-gray-100 text-gray-700;
+        }
+
+        .btn-download {
+            @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm px-4 py-2 rounded-xl hover:shadow-lg transition;
+        }
+
+        .section:nth-child(1) {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+        }
+        .section:nth-child(2) {
+            background: linear-gradient(135deg, #1e3a8a, #9333ea);
+        }
+        .section:nth-child(3) {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+        }
+        .section:nth-child(4) {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+        }
+        .section:nth-child(5) {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        }
+
+        .text-gray-600 {
+            color: #cbd5e1;
+        }
+
+        .text-gray-700 {
+            color: #e2e8f0;
+        }
+
+        .border-gray-300 {
+            border-color: #334155;
+        }
+
+        .border-gray-100 {
+            border-color: #475569;
+        }
+
+        .text-gray-400 {
+            color: #94a3b8;
+        }
+
+        .text-gray-800 {
+            color: #f1f5f9;
+        }
+
+        /*.section-bg {*/
+        /*    background-image: linear-gradient(to bottom right, rgba(30, 58, 138, 0.3), rgba(124, 58, 237, 0.3)), url('https://images.unsplash.com/photo-1601290266442-6b1f2ab5e30b?auto=format&fit=crop&w=1600&q=80');*/
+        /*    background-size: cover;*/
+        /*    background-position: center;*/
+        /*    background-blend-mode: overlay;*/
+        /*}*/
+
+        .faq-enter-active, .faq-leave-active {
+            transition: all 0.3s ease;
+        }
+
+        .faq-enter-from, .faq-leave-to {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .platform-wave {
+            transition: background-color 0.5s, color 0.5s;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .platform-wave.active-windows {
+            transition: color 1s;
+            color: #2563eb;
+        }
+
+        .platform-wave.active-apple-m1 {
+            transition: color 1s;
+            color: #60a5fa;
+        }
+
+        .platform-wave.active-apple-intel {
+            transition: color 1s;
+            color: #93c5fd;
+        }
+
+        .platform-wave.active-github {
+            transition: color 1s;
+            color: #a78bfa;
+        }
+
+        .platform-wave.active-gitee {
+            transition: color 1s;
+            color: #f87171;
+        }
+
+        .platform-wave.active-xhs {
+            transition: color 1s;
+            color: #ff2442;
+        }
+        .fade-img-enter-active, .fade-img-leave-active {
+            transition: opacity 0.4s;
+        }
+        .fade-img-enter-from, .fade-img-leave-to {
+            opacity: 0;
+        }
+    </style>
 </head>
-<body class="text-[#DDE6F0] relative bg-no-repeat"
-      style="background-image: url('./bg-long.webp'), linear-gradient(183deg, #000b16 100%, #00132a 46%, #00060c 1%, #000 0%);background-size: 100vw;">
-<!-- 背景图层（强制拉伸变形） -->
-<!--<div class="fixed inset-0 z-[-10] bg-no-repeat bg-[length:100%_100%] bg-center bg-[url('./bg.png')]"></div>-->
-
-
-<!-- 背景遮罩层：柔和渐变 + 模糊 -->
-<div
-  class="fixed inset-0 z-[-9] pointer-events-none"></div>
-
-<!-- 头图区（延续 body 背景色） -->
-<div class="relative overflow-hidden">
-  <section
-    class="max-w-7xl mx-auto px-8 pt-20 pb-24 flex flex-col lg:flex-row items-center rounded-lg"
-  >
-    <div class="lg:w-2/3 text-left">
-      <h1 class="text-4xl md:text-2xl font-extrabold leading-tight mb-6">
-        零代码+零风险！中文AI把ChatGPT+翻译神器+员工培训全包了
-      </h1>
-      <p class="text-xl mb-8">
-        OpenChat - 开源免费的本地AI解决方案，保护您的数据安全，提供强大的文档处理和智能助手功能
-      </p>
-      <div class="relative inline-block">
-        <div class="relative inline-block">
-          <button id="downloadBtn1"
-                  class="px-6 py-3 border border-[#01D5FF] rounded-full font-medium text-[#01D5FF] hover:border-white hover:text-white hover:bg-[#01D5FF]/10 transition-all">
-            下载 OpenChat →
-          </button>
-          <div id="downloadMenu1"
-               class="hidden absolute right-0 mt-2 w-52 bg-[rgba(255,255,255,0.05)] backdrop-blur-md rounded-md shadow-lg ring-1 ring-white/10 text-blue-100 overflow-hidden">
-            <a href="https://fastaistack.oss-cn-beijing.aliyuncs.com/openchat/OpenChatSetup_v1.0.3_win.exe"
-               class="block px-4 py-2 text-sm text-blue-100 hover:bg-[rgba(255,255,255,0.1)] transition-colors duration-150 text-left">
-              <span class="mr-2">💻</span>Windows 版本</a>
-            <a href="https://fastaistack.oss-cn-beijing.aliyuncs.com/openchat/OpenChatSetup_v1.0.3_apple.dmg"
-               class="block px-4 py-2 text-sm text-blue-100 hover:bg-[rgba(255,255,255,0.1)] transition-colors duration-150 text-left">
-              <span class="mr-2">🍏</span>Apple M 芯片</a>
-            <a href="https://fastaistack.oss-cn-beijing.aliyuncs.com/openchat/OpenChatSetup_v1.0.3_intel.dmg"
-               class="block px-4 py-2 text-sm text-blue-100 hover:bg-[rgba(255,255,255,0.1)] transition-colors duration-150 text-left">
-              <span class="mr-2">🍎</span>Apple Intel 芯片</a>
-          </div>
+<body class="bg-gray-900 text-white">
+<div id="app" class="z-1">
+    <header id="mainHeader"
+            class="fixed top-0 left-0 right-0 bg-gray-800 shadow flex justify-between items-center px-4 py-3 border-b border-gray-700">
+        <div class="flex items-center space-x-2">
+            <img src="./icon.png" alt="Logo" class="h-8 w-8"/>
+            <span class="text-lg font-bold text-white">OpenChat</span>
         </div>
-      </div>
+        <nav class="space-x-4 text-sm text-gray-300">
+            <a href="#" class="hover:text-white"><i class="fas fa-users mr-1"></i>社群</a>
+            <a href="#" @click.prevent="goToFaq" class="hover:text-white"><i class="fas fa-question-circle mr-1"></i>FAQ</a>
+        </nav>
+        <button class="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm px-4 py-2 rounded-xl hover:shadow-lg transition">
+            <i class="fas fa-download mr-2"></i>下载客户端
+        </button>
+    </header>
+    <div id="fullpage">
+        <div class="section fp-section section-bg h-full flex flex-col justify-center px-4"
+             style="background-image: linear-gradient(to bottom right, rgba(30,58,138,0.3), rgba(124,58,237,0.3)), url('https://images.unsplash.com/photo-1601290266442-6b1f2ab5e30b?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center; background-blend-mode: overlay;">
+            <div class="max-w-6xl w-full mx-auto flex flex-col lg:flex-row items-center gap-24">
+                <div class="flex-1 text-center lg:text-left">
+                    <h1 class="text-5xl font-extrabold leading-snug text-white mb-4 animated delay-300">
+                        <i class="fas fa-robot mr-3 text-purple-400 bounce"></i>
+                        OpenChat
+                    </h1>
+                    <p class="text-lg text-blue-100 animated delay-300">
+                        开源免费的AI解决方案，保护您的数据安全，提供强大的文档处理和智能助手功能，无需注册！即可开启您的大模型体验！！
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-3 justify-center lg:justify-start">
+                        <a href="#" class="px-5 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+                            <i class="fab fa-windows mr-2"></i>Windows 下载
+                        </a>
+                        <a href="#" class="px-5 py-2 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition">
+                            <i class="fab fa-apple mr-2"></i>Mac M1 下载
+                        </a>
+                        <a href="#" class="px-5 py-2 bg-gray-400 text-white rounded-xl hover:bg-gray-500 transition">
+                            <i class="fab fa-apple mr-2"></i>Mac Intel 下载
+                        </a>
+                    </div>
+                </div>
+                <div class="flex-1 animated delay-300">
+                    <img src="./index.png" alt="展示图"
+                         class="w-full h-auto object-cover rounded-xl shadow-xl ring-2 ring-white/20"/>
+                </div>
+            </div>
+        </div>
+        <div class="section fp-section h-full flex flex-col justify-center px-4 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]">
+            <section
+                    class="max-w-screen-lg mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-24 items-start">
+                <div class="md:col-span-2 animated">
+                    <div class="text-center text-blue-100 text-lg mb-3">
+                        <i class="fas fa-comment-dots mr-2 text-purple-400 pulse"></i>
+                        {{ tabs[activeTab].desc }}
+                    </div>
+                    <transition name="fade-img" mode="out-in">
+                        <img
+                                :src="tabs[activeTab].image"
+                                :alt="tabs[activeTab].name"
+                                :key="tabs[activeTab].image"
+                                class="w-full rounded-xl object-cover h-72 shadow-md border border-gray-100"
+                        />
+                    </transition>
+                </div>
+                <div class="flex flex-col gap-3 animated h-full justify-center">
+                    <button
+                            v-for="(tab, index) in tabs"
+                            :key="index"
+                            @click="activeTab = index"
+                            :class="[
+                              'group text-left px-5 py-3 rounded-xl transition-all duration-300 flex items-center gap-3',
+                              activeTab === index ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-[1.02]' : 'bg-white hover:bg-gray-100 text-gray-700'
+                            ]"
+                    >
+                        <span :class="activeTab === index ? 'text-green-400' : 'text-gray-400'">
+                            <i class="fas fa-circle mr-2"></i>
+                        </span>
+                        <span class="text-base font-medium">{{ tab.name }}</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+        <div class="section fp-section h-full flex flex-col justify-center px-4 bg-gradient-to-br from-[#1e293b] to-[#0f172a]">
+            <div class="max-w-4xl w-full mx-auto bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-8 shadow-xl">
+                <h2 class="text-2xl font-semibold text-center mb-4 text-white flex items-center justify-center gap-2">
+                    <i class="fas fa-cloud-download-alt mr-2 text-pink-400 bounce"></i>
+                    免费开源
+                </h2>
+                <p class="text-center text-gray-300 mb-8">
+                    OpenChat面相社会开源开放，您不仅可以免费使用本软件，也能在开源网站上看到我们的开发进度，若您有任何疑问和建议，欢迎通过社群与我们联系!
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 justify-center items-center">
+                    <a href="#"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#2563eb] transition"
+                       data-platform="windows">
+                        <i class="fab fa-windows text-3xl mb-2"></i>
+                        <span class="text-sm">Windows</span>
+                    </a>
+                    <a href="#"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#60a5fa] transition"
+                       data-platform="apple-m1">
+                        <i class="fab fa-apple text-3xl mb-2"></i>
+                        <span class="text-sm">Mac M1</span>
+                    </a>
+                    <a href="#"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#93c5fd] transition"
+                       data-platform="apple-intel">
+                        <i class="fab fa-apple text-3xl mb-2"></i>
+                        <span class="text-sm">Mac Intel</span>
+                    </a>
+                    <a href="https://github.com/openchat" target="_blank"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#a78bfa] transition"
+                       data-platform="github">
+                        <i class="fab fa-github text-3xl mb-2"></i>
+                        <span class="text-sm">GitHub</span>
+                    </a>
+                    <a href="https://gitee.com/openchat" target="_blank"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#f87171] transition"
+                       data-platform="gitee">
+                        <i class="fab fa-git-alt text-3xl mb-2"></i>
+                        <span class="text-sm">Gitee</span>
+                    </a>
+                    <a href="https://www.xiaohongshu.com/user/openchat" target="_blank"
+                       class="platform-wave flex flex-col items-center text-white hover:text-[#ff2442] transition"
+                       data-platform="xhs">
+                        <i class="fas fa-book-open text-3xl mb-2"></i>
+                        <span class="text-sm">小红书</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="section fp-section h-full flex flex-col justify-center px-4 bg-[#0f172a]">
+            <div class="max-w-screen-md mx-auto px-6 pt-12 pb-32 flex-1 flex flex-col justify-center bg-white/5 backdrop-blur-md border border-white/10 rounded-xl shadow-xl">
+                <h2 class="text-xl font-semibold mb-6 animated flex items-center text-white">
+                    <i class="fas fa-question-circle mr-2 text-blue-400 pulse"></i>
+                    常见问题
+                </h2>
+                <div v-for="(item, index) in faqs" :key="index" class="mb-4 animated">
+                    <button @click="toggle(index)"
+                            class="w-full text-left font-medium py-2 border-b border-gray-600 text-white flex items-center">
+                        <span v-if="!item.open">
+                          <i class="fas fa-chevron-down mr-2 text-gray-400"></i>
+                        </span>
+                        <span v-else>
+                          <i class="fas fa-chevron-up mr-2 text-blue-300"></i>
+                        </span>
+                        {{ item.question }}
+                    </button>
+                    <transition name="faq">
+                        <div v-show="item.open" class="text-sm text-gray-300 mt-2 px-2">
+                            {{ item.answer }}
+                        </div>
+                    </transition>
+                </div>
+            </div>
+            <footer class="absolute bottom-0 left-0 w-full text-center text-sm text-gray-400 border-t pt-6 pb-6 bg-transparent">
+                © 2025 OpenChat - 开源私有AI助手
+            </footer>
+        </div>
     </div>
-    <div class="lg:w-1/3 mt-12 lg:mt-0 flex justify-end">
-      <div class="w-72 h-72 bg-transparent rounded-lg">
-        <img class="w-full h-full fade-animation bg-transparent" src="./icon.png" alt="OpenChat">
-      </div>
-    </div>
-  </section>
 </div>
-
-<!-- 为什么选择 Claude？（延续 body 背景） -->
-<section class="max-w-7xl mx-auto px-8 py-20">
-  <h2 class="text-4xl font-bold text-center mb-12">为什么选择 OpenChat？</h2>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="p-8 rounded-xl text-center">
-      <div class="text-3xl mb-4 animate-pulse">🔒</div>
-      <h3 class="mt-4 font-semibold text-xl">数据绝对安全</h3>
-      <p class="mt-2 text-base">100% 本地运行，敏感数据永不外泄，断网也能使用，完全保护您的隐私与机密。</p>
-    </div>
-    <div class="p-8 rounded-xl text-center">
-      <div class="text-3xl mb-4 animate-pulse">📄</div>
-      <h3 class="mt-4 font-semibold text-xl">智能文档处理</h3>
-      <p class="mt-2 text-base">支持百万 Token 长文本解析，PDF/Word/TXT 格式翻译，合同、报告一键搞定。</p>
-    </div>
-    <div class="p-8 rounded-xl text-center">
-      <div class="text-3xl mb-4 animate-pulse">🤖</div>
-      <h3 class="mt-4 font-semibold text-xl">自定义智能助手</h3>
-      <p class="mt-2 text-base">零代码 DIY 专属 AI 助手，客服、教学、写作等多种场景自由定制。</p>
-    </div>
-  </div>
-</section>
-
-<!-- 模型 Opus 4 & Sonnet 4（浅米黄卡片背景） -->
-<section class="max-w-7xl mx-auto py-20">
-  <div
-    class="px-8 rounded-xl p-12 flex lg:flex-row flex-col items-center justify-between gap-8"
-  >
-    <div class="lg:w-1/2 mb-8 lg:mb-0">
-      <h2 class="text-3xl font-bold mb-4">OpenChat v1.0.3 全面升级！</h2>
-      <p class="text-lg mb-6 text-sm text-600">全新界面、更强模型支持、更贴心功能体验。
-        <br>
-        新增智能体系统、沉浸式翻译模块和自动更新能力，支持最新 Qwen3 模型，显著提升使用体验。</p>
-    </div>
-    <div class="lg:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white text-gray-600 p-6 rounded-lg text-center shadow-lg hover:shadow-xl transition-all">
-        <h3 class="font-medium mb-2">核心功能升级</h3>
-        <p class="text-sm">智能体系统支持个性化助手<br>文档沉浸式翻译，中英日法韩互译<br>支持 Qwen3 模型，增强语言理解</p>
-      </div>
-      <div class="bg-white text-gray-600 p-6 rounded-lg text-center shadow-lg hover:shadow-xl transition-all">
-        <h3 class="font-medium mb-2">全局配置与在线更新</h3>
-        <p class="text-sm">模型/检索/安全配置统一管理<br>启动时自动检测与更新版本<br>简化部署体验，减少维护成本</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 如何使用 Claude（延续 body 背景） -->
-<section class="max-w-7xl mx-auto py-20">
-  <h2 class="text-4xl font-bold text-center mb-12">小白三步上手</h2>
-  <div class="mx-auto flex rounded-xl overflow-hidden">
-    <!-- 左侧 Tabs 列表 -->
-    <ul id="tab-list" class="w-1/3 border-r border-zinc-600">
-      <li data-target="learning" class="tab-item px-4 py-4 cursor-pointer">
-        <div class="flex justify-between items-center">
-          <span class="title text-gray-300 hover:text-gray-200 text-lg">拖文件到本地</span>
-          <svg
-            class="arrow w-4 h-4 text-gray-400 transform transition-transform duration-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </div>
-        <p class="description mt-2 text-sm text-gray-400 hidden">
-          支持 PDF/Word/TXT/PPT 等格式，无需配置。
-        </p>
-      </li>
-
-      <li data-target="coding" class="tab-item px-4 py-4 cursor-pointer">
-        <div class="flex justify-between items-center">
-          <span class="title text-gray-300 hover:text-gray-200 text-lg">点击“创建知识库”</span>
-          <svg
-            class="arrow w-4 h-4 text-gray-400 transform transition-transform duration-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </div>
-        <p class="description mt-2 text-sm text-gray-400 hidden">
-          可视化界面如搭积木，自动生成语义索引。
-        </p>
-      </li>
-
-      <li data-target="researching" class="tab-item px-4 py-4 cursor-pointer">
-        <div class="flex justify-between items-center">
-          <span class="title text-gray-300 hover:text-gray-200 text-lg">开始提问</span>
-          <svg
-            class="arrow w-4 h-4 text-gray-400 transform transition-transform duration-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </div>
-        <p class="description mt-2 text-sm text-gray-400 hidden">
-          部署简单，一键启动，中小企业极速建站。
-        </p>
-      </li>
-    </ul>
-
-    <!-- 右侧内容面板 -->
-    <div id="tab-panels" class="flex-1 p-6 relative">
-      <!-- 每个 panel 初始都 hidden，只有第一个移除 hidden -->
-      <div id="learning" class="content-panel fade-in">
-        <div class="h-80 rounded-lg mx-auto">
-          <img class="h-full mx-auto" src="./文件上传.png" alt="">
-        </div>
-      </div>
-      <div id="coding" class="content-panel hidden">
-        <div class="h-80 rounded-lg mx-auto">
-          <img class="h-full mx-auto" src="./文件解析.gif" alt="">
-        </div>
-      </div>
-      <div id="researching" class="content-panel hidden">
-        <div class="h-80 rounded-lg mx-auto">
-          <img class="h-full mx-auto" src="./知识库对话.gif" alt="">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="py-20">
-  <div class="max-w-7xl mx-auto px-8
-                  rounded-xl p-8">
-    <h2 class="text-3xl font-bold mb-6">探索最新信息</h2>
-    <ul class="space-y-4 text-lg">
-      <li><a href="https://blog.csdn.net/qq_62881830/article/details/148956575?spm=1001.2014.3001.5501" target="_blank"
-             class="text-[#01D5FF] hover:text-white hover:underline transition-colors duration-200">开源神器OpenChat：本地运行的高效生产力工具 →</a></li>
-      <li><a
-        href="https://blog.csdn.net/Sophya89/article/details/147136936?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogOpenSearchComplete%7ERate-1-147136936-blog-148956575.235%5Ev43%5Epc_blog_bottom_relevance_base9&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogOpenSearchComplete%7ERate-1-147136936-blog-148956575.235%5Ev43%5Epc_blog_bottom_relevance_base9&utm_relevant_index=1"
-        target="_blank" class="text-[#01D5FF] hover:text-white hover:underline transition-colors duration-200">开源神器OpenChat：本地化运行+多模型自由切换，一键打造私有AI助手！
-        →</a></li>
-      <li><a href="https://gitee.com/fastaistack/openchat/blob/master/doc/intro/FAQ.md" target="_blank"
-             class="text-[#01D5FF] hover:text-white hover:underline transition-colors duration-200">Openchat常见问题解答（F&Q） →</a></li>
-      <li><a href="https://gitee.com/fastaistack/openchat/blob/master/doc/intro/MAC%E8%BF%90%E8%A1%8C.md"
-             target="_blank" class="text-[#01D5FF] hover:text-white hover:underline transition-colors duration-200">MacOS系统下提示文件损坏问题修复指南 →</a></li>
-      <li><a href="https://gitee.com/fastaistack/openchat/blob/master/doc/intro/%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md"
-             target="_blank" class="text-[#01D5FF] hover:text-white hover:underline transition-colors duration-200">OpenChat完全上手指南 →</a></li>
-    </ul>
-  </div>
-</section>
-
-<!-- 用户评价（延续 body 背景） -->
-<section class="max-w-7xl mx-auto px-8 py-20">
-  <h2 class="text-4xl font-bold text-center mb-12">用户评价</h2>
-  <div class="flex overflow-x-auto">
-    <div class=" p-6 rounded-xl basis-1/3">
-      <div class="h-56 mb-4"><img class="mx-auto h-full overflow-hidden rounded-md"
-                                  src="https://randomuser.me/api/portraits/men/32.jpg" alt=""></div>
-      <p class="text-gray-300 mb-2 text-sm">“作为律所合伙人，我们处理了大量敏感合同，OpenChat
-        本地部署让我们放心使用，效率提升300%！”</p>
-      <p class="text-gray-400 text-right mr-2 text-sm">张律师 - 明德律所合伙人</p>
-    </div>
-    <div class="p-6 rounded-xl basis-1/3">
-      <div class="h-56 mb-4"><img class="mx-auto h-full overflow-hidden rounded-md"
-                                  src="https://randomuser.me/api/portraits/women/44.jpg" alt=""></div>
-      <p class="text-gray-300 mb-2 text-sm">“Zotero 插件+文献翻译+笔记生成，一键搞定！我的科研效率翻倍。”</p>
-      <p class="text-gray-400 text-right mr-2 text-sm">李同学 - 清华大学博士生</p>
-    </div>
-    <div class=" p-6 rounded-xl basis-1/3">
-      <div class="h-56 mb-4"><img class="mx-auto h-full overflow-hidden rounded-md"
-                                  src="https://randomuser.me/api/portraits/men/75.jpg" alt=""></div>
-      <p class="text-gray-300 mb-2 text-sm">“开发者模式支持 API 对接，我把旧 NAS 变成 AI
-        算力中心，团队协作效率大幅提升！”</p>
-      <p class="text-gray-400 text-right mr-2 text-sm">王工程师 - 科技公司 CTO</p>
-    </div>
-  </div>
-</section>
-
-<!-- 尝试使用 Claude（延续 body 背景） -->
-<section class="max-w-7xl mx-auto px-8 py-20">
-  <h2 class="text-4xl font-bold text-center mb-8">尝试使用 OpenChat</h2>
-  <div id="tag-list" class="flex flex-wrap justify-center gap-4 mb-12">
-    <span data-tag="OpenChat"
-          class="tag-item cursor-pointer px-4 py-2 bg-[rgba(255,255,255,0.05)] text-blue-100 border border-white/10 rounded-full text-sm">
-      人工智能
-    </span>
-    <span data-tag="AI神器"
-          class="tag-item cursor-pointer px-4 py-2 bg-[rgba(255,255,255,0.05)] text-blue-100 border border-white/10 rounded-full text-sm">
-      自动化
-    </span>
-    <span data-tag="本地部署"
-          class="tag-item cursor-pointer px-4 py-2 bg-[rgba(255,255,255,0.05)] text-blue-100 border border-white/10 rounded-full text-sm">
-     编码
-    </span>
-    <span data-tag="防泄密"
-          class="tag-item cursor-pointer px-4 py-2 bg-[rgba(255,255,255,0.05)] text-blue-100 border border-white/10 rounded-full text-sm">
-      数据分析
-    </span>
-    <span data-tag="私有知识库"
-          class="tag-item cursor-pointer px-4 py-2 bg-[rgba(255,255,255,0.05)] text-blue-100 border border-white/10 rounded-full text-sm">
-      写作
-    </span>
-    <span data-tag="智能助手搭建"
-          class="tag-item cursor-pointer px-4 py-2 bg-[rgba(255,255,255,0.05)] text-blue-100 border border-white/10 rounded-full text-sm">
-      生产力
-    </span>
-  </div>
-  <!-- 问题列表容器，由 JS 动态渲染 -->
-  <div id="questions-container" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
-</section>
-
-<!-- Claude 随你而行（深色背景） -->
-<section class="text-white pt-20 pb-12">
-  <div class="max-w-5xl mb-6 mx-auto flex flex-col lg:flex-row items-center justify-between">
-    <div class="lg:w-2/3 text-center lg:text-left mb-8 lg:mb-0">
-      <h2 class="text-3xl font-bold mb-4">准备好体验革命性的本地AI解决方案了吗？</h2>
-    </div>
-    <div class="lg:w-1/3 text-right">
-      <div class="relative inline-block">
-        <button id="downloadBtn2"
-                class="px-6 py-3 border border-[#01D5FF] rounded-full font-medium text-[#01D5FF] hover:border-white hover:text-white hover:bg-[#01D5FF]/10 transition-all">
-          下载 OpenChat →
-        </button>
-        <div id="downloadMenu2"
-             class="hidden absolute right-0 mt-2 w-52 bg-[rgba(255,255,255,0.05)] backdrop-blur-md rounded-md shadow-lg ring-1 ring-white/10 text-blue-100 overflow-hidden">
-          <a href="https://fastaistack.oss-cn-beijing.aliyuncs.com/openchat/OpenChatSetup_v1.0.3_win.exe"
-             class="block px-4 py-2 text-sm text-blue-100 hover:bg-[rgba(255,255,255,0.1)] transition-colors duration-150 text-left">
-            <span class="mr-2">💻</span>Windows 版本</a>
-          <a href="https://fastaistack.oss-cn-beijing.aliyuncs.com/openchat/OpenChatSetup_v1.0.3_apple.dmg"
-             class="block px-4 py-2 text-sm text-blue-100 hover:bg-[rgba(255,255,255,0.1)] transition-colors duration-150 text-left">
-            <span class="mr-2">🍏</span>Apple M 芯片</a>
-          <a href="https://fastaistack.oss-cn-beijing.aliyuncs.com/openchat/OpenChatSetup_v1.0.3_intel.dmg"
-             class="block px-4 py-2 text-sm text-blue-100 hover:bg-[rgba(255,255,255,0.1)] transition-colors duration-150 text-left">
-            <span class="mr-2">🍎</span>Apple Intel 芯片</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex gap-4 justify-between max-w-5xl mx-auto">
-    <div class="rounded-full bg-gray-800 px-3 py-1 text-sm">#OpenChat</div>
-    <div class="rounded-full bg-gray-800 px-3 py-1 text-sm">#AI神器</div>
-    <div class="rounded-full bg-gray-800 px-3 py-1 text-sm">#本地部署</div>
-    <div class="rounded-full bg-gray-800 px-3 py-1 text-sm">#防泄密</div>
-    <div class="rounded-full bg-gray-800 px-3 py-1 text-sm">#私有知识库</div>
-    <div class="rounded-full bg-gray-800 px-3 py-1 text-sm">#智能助手搭建</div>
-    <div class="rounded-full bg-gray-800 px-3 py-1 text-sm">#文档翻译</div>
-    <div class="rounded-full bg-gray-800 px-3 py-1 text-sm">#学术科研</div>
-    <div class="rounded-full bg-gray-800 px-3 py-1 text-sm">#效率工具</div>
-  </div>
-</section>
-
-<!-- 页脚（深色背景） -->
-<footer class="text-gray-400 pb-8">
-  <div class="text-center text-sm">&copy; 2023 OpenChat 项目组 | 安全 · 高效 · 自由</div>
-</footer>
-
 <script>
-  function setupDropdown(btnId, menuId) {
-    const btn = document.getElementById(btnId)
-    const menu = document.getElementById(menuId)
-    btn.addEventListener('click', e => {
-      e.stopPropagation()
-      menu.classList.toggle('hidden')
-    })
-    // 点击其它地方收起
-    document.addEventListener('click', () => {
-      if (!menu.classList.contains('hidden')) {
-        menu.classList.add('hidden')
-      }
-    })
-  }
+    const {createApp, ref} = Vue
+    createApp({
+        setup() {
+            const activeTab = ref(0)
+            const tabs = ref([
+                {
+                    name: '多元兼容',
+                    image: './文件上传.png',
+                    desc: '1OpenChat兼容主流云端大模型，无论是 OpenAI 的强大语言理解能力，还是 Deepseek 的高效推理性能，亦或是硅基流动的创新技术，都能无缝接入；无需在不同平台间切换便能享体验所有模型服务'
+                },
+                {
+                    name: '安全部署',
+                    image: './index.png',
+                    desc: '2OpenChat兼容主流云端大模型，无论是 OpenAI 的强大语言理解能力，还是 Deepseek 的高效推理性能，亦或是硅基流动的创新技术，都能无缝接入；无需在不同平台间切换便能享体验所有模型服务'
+                },
+                {
+                    name: '实用插件',
+                    image: './文件上传.png',
+                    desc: '3OpenChat兼容主流云端大模型，无论是 OpenAI 的强大语言理解能力，还是 Deepseek 的高效推理性能，亦或是硅基流动的创新技术，都能无缝接入；无需在不同平台间切换便能享体验所有模型服务'
+                },
+                {
+                    name: '模型应用',
+                    image: './文件上传.png',
+                    desc: '4OpenChat兼容主流云端大模型，无论是 OpenAI 的强大语言理解能力，还是 Deepseek 的高效推理性能，亦或是硅基流动的创新技术，都能无缝接入；无需在不同平台间切换便能享体验所有模型服务'
+                }
+            ])
 
-  setupDropdown('downloadBtn1', 'downloadMenu1')
-  setupDropdown('downloadBtn2', 'downloadMenu2')
+            const platforms = ref([
+                {name: 'Windows', icon: 'icon-windows.svg'},
+                {name: 'Mac M1', icon: 'icon-mac-m1.svg'},
+                {name: 'Mac Intel', icon: 'icon-mac-intel.svg'},
+                {name: 'GitHub', icon: 'icon-github.svg'},
+                {name: 'Gitee', icon: 'icon-gitee.svg'},
+                {name: '小红书', icon: 'icon-xhs.svg'}
+            ])
 
-  const tabs = document.querySelectorAll('.tab-item')
-  const panels = document.querySelectorAll('.content-panel')
+            const faqs = ref([
+                {question: 'OpenChat如何下载和安装？', answer: '点击页面中的图标选择对应平台进行下载安装。', open: false},
+                {
+                    question: 'OpenChat支持哪些功能？',
+                    answer: '支持本地部署、文件问答、插件扩展、联网搜索等多种能力。',
+                    open: false
+                },
+                {
+                    question: '是否支持手机端使用？',
+                    answer: '目前支持Android和iOS平台，可通过各自渠道下载安装。',
+                    open: false
+                },
+                {
+                    question: '是否需要联网？',
+                    answer: '核心功能可在本地运行，无需联网。联网搜索等需连接互联网。',
+                    open: false
+                }
+            ])
 
-  function activateTab(targetId) {
-    // 隐藏所有 panels & 重置文案/箭头
-    panels.forEach(p => {
-      p.classList.add('hidden')
-      p.classList.remove('fade-in')
-    })
-    tabs.forEach(li => {
-      li.querySelector('.description').classList.add('hidden')
-      li.querySelector('.title')
-        .classList.remove('text-gray-200', 'font-medium')
-      li.querySelector('.arrow')
-        .classList.remove('rotate-180')
-    })
+            function toggle(index) {
+                faqs.value[index].open = !faqs.value[index].open
+            }
 
-    // 显示对应 panel
-    const panel = document.getElementById(targetId)
-    panel.classList.remove('hidden')
-    void panel.offsetWidth  // 强制重绘
-    panel.classList.add('fade-in')
+            const goToFaq = () => {
+                const fullpageApi = window.fullpage_api;
+                if (fullpageApi) {
+                    fullpageApi.moveTo(document.querySelectorAll('.fp-section').length); // 移动到最后一屏（FAQ）
+                }
+            }
+            const scrollToTop = () => {
+                const fullpageApi = window.fullpage_api;
+                if (fullpageApi) {
+                    fullpageApi.moveTo(1); // 滚动到第 1 屏
+                }
+            }
 
-    // 高亮当前 tab，显示描述 & 箭头向上
-    const activeLi = document.querySelector(`.tab-item[data-target="${targetId}"]`)
-    activeLi.querySelector('.title')
-      .classList.add('text-gray-200', 'font-medium')
-    activeLi.querySelector('.description')
-      .classList.remove('hidden')
-    activeLi.querySelector('.arrow')
-      .classList.add('rotate-180')
-  }
+            return {
+                activeTab,
+                tabs,
+                faqs,
+                platforms,
+                toggle,
+                goToFaq,
+                scrollToTop
+            }
+        },
+        mounted() {
+            const animatedSections = new Set()
+            new fullpage('#fullpage', {
+                autoScrolling: true,
+                navigation: false,
+                scrollHorizontally: false,
+                paddingTop: '4rem',
+                credits: {
+                    enabled: false,
+                    label: '',
+                    position: 'right'
+                },
+                onLeave: function (origin, destination, direction) {
+                    const header = document.getElementById('mainHeader')
+                    if (origin.index === 0 && direction === 'down') {
+                        header.classList.add('header-hidden')
+                    } else if (destination.index === 0 && direction === 'up') {
+                        header.classList.remove('header-hidden')
+                    }
+                },
+                afterLoad: function (origin, destination) {
+                    const section = destination.item
+                    const sectionId = destination.index
+                    if (animatedSections.has(sectionId)) return
+                    animatedSections.add(sectionId)
+                    const fadeEls = section.querySelectorAll('.animated')
+                    fadeEls.forEach((el, i) => {
+                        el.style.animationDelay = `${0.1 * i}s`
+                        el.classList.add('fade-in-start')
+                    })
+                }
+            })
+        }
+    }).mount('#app')
+    document.addEventListener('DOMContentLoaded', () => {
+        const platforms = document.querySelectorAll('.platform-wave');
+        let i = 0;
+        let platformInterval = null;
 
-  // 初始化：激活第一个
-  activateTab(tabs[0].dataset.target)
+        function highlight(index) {
+            platforms.forEach((el, idx) => {
+                el.classList.remove(
+                    'active-windows',
+                    'active-apple-m1',
+                    'active-apple-intel',
+                    'active-github',
+                    'active-gitee',
+                    'active-xhs'
+                );
+                if (idx === index) {
+                    const key = el.dataset.platform;
+                    el.classList.add(`active-${key}`);
+                }
+            });
+        }
 
-  tabs.forEach(li => {
-    li.addEventListener('click', () => activateTab(li.dataset.target))
-  })
+        function startWave() {
+            platformInterval = setInterval(() => {
+                highlight(i);
+                i = (i + 1) % platforms.length;
+            }, 2000);
+        }
 
-  // 在此维护每个标签对应的问题数组
-  const questionsData = {
-    'OpenChat': [
-      '15 年真实工作经验后，我如何以自己本来的声音写作，而不是另一个“奋斗文化”克隆？',
-      '如何让我的写作更富个性，而非模板化？',
-      '怎样利用 OpenChat 帮我梳理思路？'
-    ],
-    'AI神器': [
-      '有哪些 AI 功能可以帮我自动化日常任务？',
-      '如何使用这些 AI 工具来优化我的工作流？',
-      '怎样将 AI 嵌入到我的项目中？'
-    ],
-    '本地部署': [
-      '如何在本地环境快速部署 OpenChat？',
-      '部署时需要注意哪些安全配置？',
-      '如何实现高可用的本地化部署？'
-    ],
-    '防泄密': [
-      '怎样保证对话内容不被外泄？',
-      '有哪些内置的隐私保护机制？',
-      '如何在企业级场景下做到数据隔离？'
-    ],
-    '私有知识库': [
-      '如何构建自己的私有知识库？',
-      '怎样把企业文档同步到知识库？',
-      '如何实现多源文档的统一检索？'
-    ],
-    '智能助手搭建': [
-      '如何为我的客服系统集成智能助手？',
-      '怎样让助手支持行业术语？',
-      '如何训练助手理解自定义意图？'
-    ],
-    '文档翻译': [
-      '如何用 OpenChat 高效翻译技术文档？',
-      '怎样保持术语一致性？',
-      '如何批量处理多语言文档？'
-    ],
-    '学术科研': [
-      '如何利用 OpenChat 快速查找参考文献？',
-      '怎样用它来生成实验报告？',
-      '如何保证学术写作的原创性？'
-    ],
-    '效率工具': [
-      '有哪些内置模板可以提升效率？',
-      '如何将 OpenChat 与日历、邮件联动？',
-      '怎样自定义快捷指令？'
-    ]
-  }
+        function stopWave() {
+            clearInterval(platformInterval);
+            platforms.forEach((el, idx) => {
+                el.classList.remove(
+                    'active-windows',
+                    'active-apple-m1',
+                    'active-apple-intel',
+                    'active-github',
+                    'active-gitee',
+                    'active-xhs'
+                );
+            });
+        }
 
-  const tags = document.querySelectorAll('.tag-item')
-  const container = document.getElementById('questions-container')
+        platforms.forEach((el) => {
+            el.addEventListener('mouseenter', stopWave);
+            el.addEventListener('mouseleave', startWave);
+        });
 
-  // 渲染指定标签的所有问题
-  function renderQuestions(tag) {
-    container.innerHTML = ''; // 清空旧内容
-    (questionsData[tag] || []).forEach(text => {
-      const card = document.createElement('div')
-      card.className = 'bg-white text-gray-600 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex flex-col justify-between gap-4'
-      card.innerHTML = `
-        <p class="text-base text-gray-800">${text}</p>
-        <button class="px-4 py-2 border border-gray-400 hover:border-gray-600 rounded-full text-sm w-full text-gray-700 hover:text-black hover:bg-gray-100 transition-all">
-          <a href="https://gitee.com/fastaistack/openchat" target="_blank" class="inline-block w-full h-full">询问 OpenChat</a>
-        </button>
-      `
-      container.appendChild(card)
-    })
-  }
-
-  // 切换选中样式并渲染
-  function activateTag(el) {
-    tags.forEach(t => {
-      t.classList.remove('bg-gray-200', 'text-gray-800')
-      t.classList.add('bg-gray-300', 'text-gray-600')
-    })
-    el.classList.remove('bg-gray-300', 'text-gray-600')
-    el.classList.add('bg-gray-200', 'text-gray-800')
-    renderQuestions(el.dataset.tag)
-  }
-
-  // 绑定事件
-  tags.forEach(t => {
-    t.addEventListener('click', () => activateTag(t))
-  })
-
-  // 初始激活第一个标签
-  if (tags.length) {
-    activateTag(tags[0])
-  }
+        startWave();
+    });
 </script>
 </body>
 </html>
